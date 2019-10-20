@@ -17,7 +17,7 @@ public class ModBlockEvents
 	{
 		AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) ->
 		{
-			Chunk chLoc = world.getChunk(player.chunkX, player.chunkZ);
+			Chunk chLoc = world.getChunk(pos);
 			
 			CompoundTag claimData = Claims.get(chLoc);
 			UUID UUIDowner = claimData.getUuid("owner");
@@ -26,14 +26,14 @@ public class ModBlockEvents
 			{
 				return ActionResult.PASS;
 			}
-			
+		
 			player.sendMessage(new LiteralText("Someone else owns this land. You may not build here."));
 			return ActionResult.FAIL;
 		});
 		
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) ->
 		{
-			Chunk chLoc = world.getChunk(player.chunkX, player.chunkZ);
+			Chunk chLoc = world.getChunk(hitResult.getBlockPos());
 			
 			CompoundTag claimData = Claims.get(chLoc);
 			UUID UUIDowner = claimData.getUuid("owner");

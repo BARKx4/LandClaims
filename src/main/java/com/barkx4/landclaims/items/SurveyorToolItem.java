@@ -2,7 +2,11 @@ package com.barkx4.landclaims.items;
 
 import java.util.UUID;
 
+import com.barkx4.economy.gui.BankChestGui;
+import com.barkx4.economy.gui.BankChestScreen;
 import com.barkx4.landclaims.claims.Claims;
+import com.barkx4.landclaims.gui.LandManagementGui;
+import com.barkx4.landclaims.gui.LandManagementScreen;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,14 +20,15 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-public class LandDeedItem extends Item 
+public class SurveyorToolItem extends Item
 {
 
-	public LandDeedItem(Settings settings) 
+	public SurveyorToolItem(Settings settings) 
 	{
 		super(settings);
+		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity playerEntity, Hand hand) 
 	{
@@ -38,19 +43,17 @@ public class LandDeedItem extends Item
 			
 			if (playerEntity.getUuid().compareTo(UUIDowner) == 0)
 			{
-				playerEntity.sendMessage(new LiteralText("You own this land claim."));
+				playerEntity.sendMessage(new LiteralText("You own this land."));
+				
+				MinecraftClient.getInstance().openScreen(new LandManagementScreen(new LandManagementGui(playerEntity, world, chLoc)));
 			}
 			else if (UUIDowner.compareTo(new UUID(0, 0)) == 0)
 			{
-				playerEntity.sendMessage(new LiteralText("Nobody owns this land. Claiming it."));
-				claimData.putUuid("owner", playerEntity.getUuid());
-				Claims.set(chLoc, claimData);
-
-				MinecraftClient.getInstance().player.getStackInHand(hand).decrement(1);
+				playerEntity.sendMessage(new LiteralText("Nobody owns this land."));
 			}
 			else
 			{
-				playerEntity.sendMessage(new LiteralText("Someone else owns this land. Cannot claim it."));
+				playerEntity.sendMessage(new LiteralText("Someone else owns this land."));
 			}
 			
 		}
